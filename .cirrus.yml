@@ -1,0 +1,51 @@
+env:
+  HOME: /root/
+
+  # Telegram
+  TG_CHAT: "@DumprXDumps"
+  TG_TOKEN: ENCRYPTED[441d72b9da2d7aeff370b375ae24eb18c0be6713bc0b75b7cab1ab0e6de15db63e83b2edfeda921380110184f2fbe0be]
+  
+  # Gitlab
+  PUSH_TO_GITLAB: true
+  GITLAB_GROUP: Android-Dumps
+  GITLAB_TOKEN: ENCRYPTED[57cf7e76da3475297525fd1dd919f07f7e15a4df4d38939561062b94219cabd3505ec2040635ca07ffc62db0987742c2]
+  GITLAB_INSTANCE: gitlab.com
+  
+  # Private SSH Key
+  PRIV_SSH_KEY: ENCRYPTED[39377910645fcf19636a0f09dbc494b2e947fb91a7db59d47472ac6bddf3b67a4f64b61d4fd799e827dfd27cccc4e5dc]
+
+task:
+  name: 'Dump'
+  auto_cancellation: $CIRRUS_BRANCH == 'autocancel'
+  compute_engine_instance:
+    image_project: ubuntu-os-cloud
+    image: family/ubuntu-2310-amd64 # https://cirrus-ci.org/guide/custom-vms/#custom-compute-engine-vms
+    cpu: 4
+    disk: 75
+    memory: 16G
+
+  Clone_script:
+      - git clone --depth=1 --single-branch https://github.com/DumprX/DumprX.git
+  
+  Set-SSH-Keys_script:
+      - mkdir -p ~/.ssh
+      - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      - ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
+      - ssh-keyscan -t rsa $GITLAB_INSTANCE >> ~/.ssh/known_hosts
+      - echo "$PRIV_SSH_KEY" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+
+  Setup_script:
+      - git config --global user.name "Sushrut1101"
+      - git config --global user.email "guptasushrut@gmail.com"
+      - cd DumprX
+      - echo "$GITLAB_TOKEN" > .gitlab_token
+      - echo "$GITLAB_GROUP" > .gitlab_group
+      - echo "$TG_CHAT" > .tg_chat
+      - echo "$TG_TOKEN" > .tg_token
+      - echo "$GITLAB_INSTANCE" > .gitlab_instance
+      - sudo bash setup.sh
+
+  DumprX_script:
+      - cd DumprX || echo "Already in the Directory"
+      - ./dumper.sh $(< ${CIRRUS_WORKING_DIR}/ROM_URL.txt)

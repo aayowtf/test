@@ -44,6 +44,9 @@ task:
       - echo "$TG_CHAT" > .tg_chat
       - echo "$TG_TOKEN" > .tg_token
       - echo "$GITLAB_INSTANCE" > .gitlab_instance
+      - apt update -y >/dev/null
+      - apt install -y python3.11-venv
+      - 
       - sudo bash setup.sh
 
   DumprX_script:

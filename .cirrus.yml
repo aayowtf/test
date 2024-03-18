@@ -2,17 +2,17 @@ env:
   HOME: /root/
 
   # Telegram
-  TG_CHAT: "@DumprXDumps"
-  TG_TOKEN: ENCRYPTED[441d72b9da2d7aeff370b375ae24eb18c0be6713bc0b75b7cab1ab0e6de15db63e83b2edfeda921380110184f2fbe0be]
+  TG_CHAT: "@dumpbyatharv"
+  TG_TOKEN: ENCRYPTED[0d3948464e198a9fa2463e6203c3fd2d715068dd211b490da7729f6fe7a02e4c8a65745cd4a02c6d6086f371563d5d55]
   
   # Gitlab
   PUSH_TO_GITLAB: true
-  GITLAB_GROUP: Android-Dumps
-  GITLAB_TOKEN: ENCRYPTED[af78a07a13a6263ded1efba0ebdeac6887c1240c705267de8a1b9cd8982682db642ad2df5a6121a591d900382adcfd38]
-  GITLAB_INSTANCE: gitlab.com
+  GITLAB_GROUP: fw-dumps
+  GITLAB_TOKEN: ENCRYPTED[9bd0178d6e1df21e29ffe52787109dece9495c2fe50f0c891154b08a0c3fe90bc90c9bd7c5dba70fb85f66179f090430]
+  GITLAB_INSTANCE: opencode.net
   
   # Private SSH Key
-  PRIV_SSH_KEY: ENCRYPTED[39377910645fcf19636a0f09dbc494b2e947fb91a7db59d47472ac6bddf3b67a4f64b61d4fd799e827dfd27cccc4e5dc]
+  PRIV_SSH_KEY: ENCRYPTED[!ad92b2e3421d680dcf9e2391bf5007d9585eb29d5074e4ac00bfa185d8bc64cc90c55e6f17da97fb5e42dbc088be6b34!]
 
 task:
   name: 'Dump'
@@ -32,12 +32,12 @@ task:
       - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
       - ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
       - ssh-keyscan -t rsa $GITLAB_INSTANCE >> ~/.ssh/known_hosts
-      - echo "$PRIV_SSH_KEY" > ~/.ssh/id_rsa
-      - chmod 600 ~/.ssh/id_rsa
+      - echo "$PRIV_SSH_KEY" > ~/.ssh/id_ed25519
+      - chmod 600 ~/.ssh/id_ed25519
 
   Setup_script:
-      - git config --global user.name "Sushrut1101"
-      - git config --global user.email "guptasushrut@gmail.com"
+      - git config --global user.name "atharvnegi"
+      - git config --global user.email "atharvnegi2951@gmail.com"
       - cd DumprX
       - echo "$GITLAB_TOKEN" > .gitlab_token
       - echo "$GITLAB_GROUP" > .gitlab_group

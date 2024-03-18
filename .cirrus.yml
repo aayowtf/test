@@ -46,7 +46,8 @@ task:
       - echo "$GITLAB_INSTANCE" > .gitlab_instance
       - apt update -y >/dev/null
       - apt install -y python3.11-venv
-      - 
+      - sudo apt install neofetch -y
+      - sudo apt install f2fs-tools -y
       - sudo bash setup.sh
 
   DumprX_script:
